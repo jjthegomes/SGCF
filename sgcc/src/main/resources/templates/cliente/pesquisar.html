@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8"/>
+    <title th:text="${title}"> Cliente </title>
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+<nav th:replace="fragments :: nav"></nav>
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active"><span th:text="${title}"></span></li>
+        </ol>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-header">
+                    <h5>
+                        <span th:text="${title}"></span>
+                            <a class="btn btn-primary btn-sm float-right"  th:href="@{'~/cliente/add'}">  <i class="fa fa-edit"></i> Adicionar Cliente</a>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form action="/cliente/busca" method="get">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input class="form-control" type="text"  id="nome" name="nome" placeholder="Buscar Cliente"/>
+                                    <span class="input-group-append">
+                                        <button class="btn btn-primary" type="submit">
+                                             <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0"
+                               th:if="${!clientes.isEmpty()}">
+                            <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>E-mail</th>
+                                <th>Data Nascimento</th>
+                                <th>Celular</th>
+                                <th colspan="2" class="text-center">Acao</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="cliente : ${clientes}">
+                                <td th:text="${cliente.nome}">Nome</td>
+                                <td th:text="${cliente.cpf}">CPF</td>
+                                <td th:text="${cliente.email}">Email</td>
+                                <td th:text="${cliente.dataNascimento}">Data Nascimento</td>
+                                <td th:text="${cliente.celular}">Celular</td>
+                                <td><a th:href="@{'/cliente/edit/' + ${cliente.id}}">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar</a></td>
+                                <td><a th:href="@{'/cliente/delete/' + ${cliente.id}}">
+                                <i class="fa fa-trash" aria-hidden="true"></i> Excluir</a></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div>
+                        <h2 th:unless="${!clientes.isEmpty()}">Nenhum cliente encontrado</h2>
+                        <a class="btn btn-dark" th:href="@{'~/'}">Voltar</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments :: div"></div>
+</div>
+
+</body>
+</html>

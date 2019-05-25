@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+    <meta charset="UTF-8"/>
+    <title th:text="${title}"> Cliente </title>
+</head>
+<body class="fixed-nav sticky-footer" id="page-top">
+<nav th:replace="fragments :: nav"></nav>
+
+<div th:classappend="${session.usuario == null} ? 'div-deslogado' : 'content-wrapper'">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>
+                            <span th:text="${title}"></span>
+                            <button class="btn btn-outline-danger btn-sm float-right" data-toggle="modal" data-target="#deleteModal" th:unless="${session.usuario == null}">
+                                <i class="fa fa-trash"></i> Deletar Conta
+                            </button>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success" role="alert" th:unless="${msgSucesso == null}">
+                            <span th:text="${msgSucesso}"></span>
+                        </div>
+                        <div class="alert alert-danger" role="alert" th:unless="${msgErro == null}">
+                            <span th:text="${msgErro}"></span>
+                        </div>
+                        <form th:object="${cliente}" th:action="@{${action}}" method="post">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="nome">Nome Completo:</label>
+                                        <input type="text" required class="form-control" id="nome" name="nome"
+                                               th:value="${cliente?.nome}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cpf">CPF:</label>
+                                        <input type="text" required class="form-control" id="cpf"
+                                               placeholder="xxx.xxx.xxx-xx" onkeydown="fMasc(this, mCPF);"
+                                               name="cpf" th:value="${cliente?.cpf}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="rg">RG:</label>
+                                        <input type="text" class="form-control" id="rg" name="rg"
+                                               th:value="${cliente?.rg}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dtNasc">Data Nascimento:</label>
+                                        <input type="text" required class="form-control" id="dtNasc"
+                                               placeholder="__/__/____" onkeypress="mascaraData(this, event)"
+                                               name="dataNascimento" th:value="${cliente?.dataNascimento}"
+                                               th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="estadoCivil">Estado Civil:</label>
+                                        <input type="text" class="form-control" id="estadoCivil" name="estadoCivil"
+                                               th:value="${cliente?.estadoCivil}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="apelido">Nome Social:</label>
+                                        <input type="text" class="form-control" id="apelido" name="apelido"
+                                               th:value="${cliente?.nomeSocial}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="cel">Celular</label>
+                                        <input type="tel" required class="form-control" id="cel"
+                                               placeholder="(xx) x xxxx-xxxx" onkeydown="fMasc(this, mTel);"
+                                               name="celular" th:value="${cliente?.celular}"
+                                               th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="telefone">Telefone:</label>
+                                        <input type="tel" required class="form-control" id="telefone"
+                                               placeholder="(xx) x xxxx-xxxx" name="telefone"
+                                               onkeydown="fMasc(this, mTel);" th:value="${cliente?.telefone}"
+                                               th:disabled="${operacao} == deletar"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="sexo">Sexo:</label> <br>
+                                        <div class="radio-inline">
+                                            <label><input id="sexo" type="radio" name="sexo" value="M" checked
+                                                          th:disabled="${operacao} == deletar"/> Masculino</label>
+
+                                            <label><input input id="sexo" type="radio" name="sexo" value="F" checked
+                                                          th:disabled="${operacao} == deletar"/> Feminino</label>
+
+                                            <label><input id="sexo" type="radio" name="sexo" value="O" checked
+                                                          th:disabled="${operacao} == deletar"/> Outro</label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="cep">CEP:</label>
+                                        <input type="text" class="form-control" id="cep" name="cep" required
+                                               onblur="pesquisacep(this.value);" th:value="${cliente?.cep}"
+                                               th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cidade">Cidade:</label>
+                                        <input type="text" class="form-control" id="cidade" name="cidade" required
+                                               th:value="${cliente?.cidade}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="logradouro">Logradouro:</label>
+                                        <input type="text" class="form-control" id="logradouro" name="logradouro" required
+                                               th:value="${cliente?.logradouro}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bairro">Bairro:</label>
+                                        <input type="text" class="form-control" id="bairro" name="bairro" required
+                                               th:value="${cliente?.bairro}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numero">Número:</label>
+                                        <input type="text" class="form-control" id="numero" name="numero" required
+                                               th:value="${cliente?.numero}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="estado">Estado:</label>
+                                        <input type="text" class="form-control" id="estado" name="estado" required
+                                               th:value="${cliente?.estado}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="complemento">Complemento:</label>
+                                        <input type="text" class="form-control" id="complemento" name="complemento"
+                                               th:value="${cliente?.complemento}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div><input name="ibge" type="hidden" id="ibge" size="8"/><br/></div>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="email">E-mail:</label>
+                                        <input type="email" class="form-control" id="email" name="email" required
+                                               th:value="${cliente?.email}" th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="senha1">Senha:</label>
+                                        <input type="password" class="form-control" id="senha1" name="senha" required
+                                               autocomplete th:value="${cliente?.senha}"
+                                               th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="senha2">Confirmar Senha:</label>
+                                        <input type="password" class="form-control" id="senha2" name="senha2" required
+                                               oninput="validaSenha(this)" th:value="${cliente?.senha}"
+                                               th:disabled="${operacao} == deletar"/>
+                                    </div>
+                                    <div class="checkbox" th:if="${operacao} == adicionar">
+                                        <label><input type="checkbox" name="agree" required id="agree"> Aceito e Concordo
+                                            com os <a href="#">Termos</a></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-success" th:value="${botaoOperacao}" name="btnConfirmar"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments :: div"></div>
+</div>
+</body>
+</html>

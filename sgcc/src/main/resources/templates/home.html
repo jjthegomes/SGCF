@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+</head>
+
+<body class="fixed-nav sticky-footer" id="page-top">
+<!-- Navigation-->
+
+<nav th:replace="fragments :: nav"></nav>
+
+<div th:classappend="${session.usuario == null} ? 'div-deslogado' : 'content-wrapper'">
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Home</li>
+        </ol>
+        <!-- Icon Cards-->
+        <div class="row">
+           
+        </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <!--<footer class="sticky-footer">-->
+        <!--<div class="container">-->
+            <!--<div class="text-center">-->
+                <!--<small>Copyright © RAJ 2018</small>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</footer>-->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+<div th:replace="fragments :: div"></div>
+
+</body>
+</html>
